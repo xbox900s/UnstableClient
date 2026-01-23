@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modpacks</title>
+  <link rel="stylesheet" href="/frontend/styles.css" />
+</head>
+<body>
+  <div class="bg-blobs">
+    <div class="blob blob-a"></div>
+    <div class="blob blob-b"></div>
+    <div class="blob blob-c"></div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <img src="/assets/logo.svg" alt="UnstableClient" class="logo" />
+        <span class="brand">UnstableClient</span>
+        <button id="toggleSidebar" class="icon-button">⟂</button>
+      </div>
+      <nav class="sidebar-nav">
+        <button data-section="dashboard">Dashboard</button>
+        <button data-section="modpacks">Modpacks</button>
+        <button data-section="mods">Mods</button>
+        <button data-section="console">Console</button>
+        <button data-section="profile">Profile Settings</button>
+        <button data-section="publish">Publish Mods</button>
+        <button data-section="installer">Installer / Paths</button>
+        <button data-section="admin" id="adminNav" class="hidden">Admin</button>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="userChip" class="user-chip">Not signed in</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="content-header">
+        <div>
+          <h1 id="sectionTitle">Dashboard</h1>
+          <p id="sectionSubtitle">Welcome to UnstableClient</p>
+        </div>
+        <div class="header-actions">
+          <button id="themeToggle" class="ghost-button">Toggle Theme</button>
+        </div>
+      </header>
+
+      <section id="sectionContent" class="section-content"></section>
+    </main>
+  </div>
+
+  <div id="wizard" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <img src="/assets/logo.svg" alt="Logo" />
+        <div>
+          <h2>First Run Wizard</h2>
+        </div>
+      </div>
+      <div class="modal-body">
+        <label>App Path</label>
+        <input id="wizardAppPath" type="text" />
+        <label>Profiles Path</label>
+        <input id="wizardProfilesPath" type="text" />
+        <label>Minecraft Name</label>
+        <input id="wizardMinecraft" type="text" />
+        <label class="checkbox">
+          <input id="wizardShortcut" type="checkbox" />
+          Desktop-Shortcut erstellen
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button id="wizardAutodetect" class="ghost-button">Auto-Detect</button>
+        <button id="wizardSubmit" class="primary-button">Install</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="auth" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <img src="/assets/logo.svg" alt="Logo" />
+        <div>
+          <h2>Login / Register</h2>
+        </div>
+      </div>
+      <div class="modal-body two-column">
+        <div>
+          <h3>Login</h3>
+          <input id="loginIdentifier" type="text" placeholder="Email or Username" />
+          <input id="loginPassword" type="password" placeholder="Password" />
+          <button id="loginSubmit" class="primary-button">Login</button>
+        </div>
+        <div>
+          <h3>Register</h3>
+          <input id="registerEmail" type="email" placeholder="Email" />
+          <input id="registerUsername" type="text" placeholder="Username" />
+          <input id="registerPassword" type="password" placeholder="Password" />
+          <input id="registerConfirm" type="password" placeholder="Confirm Password" />
+          <button id="registerSubmit" class="primary-button">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/frontend/app.js"></script>
+</body>
+</html>
