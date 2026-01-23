@@ -20,12 +20,6 @@ const sections = {
   admin: renderAdmin,
 };
 
-const paletteCommands = [
-  { label: "Open Modpacks", section: "modpacks" },
-  { label: "Install Mod", section: "mods" },
-  { label: "Settings", section: "installer" },
-];
-
 function api(path, options = {}) {
   const headers = options.headers || {};
   if (state.token) {
@@ -331,6 +325,10 @@ async function init() {
     state.defaults = configResponse.defaults;
     if (!configResponse.installed) {
       document.getElementById("wizard").classList.remove("hidden");
+      document.getElementById("app").classList.add("hidden");
+      return;
+    } else {
+      document.getElementById("app").classList.remove("hidden");
     }
   } catch (err) {
     showToast(err.message);
@@ -408,6 +406,7 @@ function bindEvents() {
       });
       state.config = data.config;
       document.getElementById("wizard").classList.add("hidden");
+      document.getElementById("app").classList.remove("hidden");
       updateUserChip();
       showToast("Setup complete");
     } catch (err) {
@@ -458,42 +457,10 @@ function bindEvents() {
     }
   });
 
-  document.getElementById("commandPaletteOpen").addEventListener("click", () => {
-    document.getElementById("commandPalette").classList.remove("hidden");
-    document.getElementById("paletteInput").focus();
-    renderPalette(paletteCommands);
-  });
-
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key.toLowerCase() === "k") {
       event.preventDefault();
-      document.getElementById("commandPalette").classList.remove("hidden");
-      document.getElementById("paletteInput").focus();
-      renderPalette(paletteCommands);
     }
-  });
-
-  document.getElementById("commandPalette").addEventListener("click", (event) => {
-    if (event.target.id === "commandPalette") {
-      document.getElementById("commandPalette").classList.add("hidden");
-    }
-  });
-
-  document.getElementById("paletteInput").addEventListener("input", (event) => {
-    const value = event.target.value.toLowerCase();
-    const filtered = paletteCommands.filter((cmd) => cmd.label.toLowerCase().includes(value));
-    renderPalette(filtered);
-  });
-}
-
-function renderPalette(items) {
-  const list = document.getElementById("paletteList");
-  list.innerHTML = items.map((item) => `<li data-section="${item.section}">${item.label}</li>`).join("");
-  list.querySelectorAll("li").forEach((li) => {
-    li.addEventListener("click", () => {
-      document.getElementById("commandPalette").classList.add("hidden");
-      setSection(li.dataset.section);
-    });
   });
 }
 

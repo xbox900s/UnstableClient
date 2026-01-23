@@ -13,7 +13,7 @@
     <div class="blob blob-c"></div>
   </div>
 
-  <div id="app" class="app">
+  <div id="app" class="app hidden">
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
         <img src="/assets/logo.svg" alt="UnstableClient" class="logo" />
@@ -43,7 +43,6 @@
         </div>
         <div class="header-actions">
           <button id="themeToggle" class="ghost-button">Toggle Theme</button>
-          <button id="commandPaletteOpen" class="ghost-button">Ctrl + K</button>
         </div>
       </header>
 
@@ -102,13 +101,6 @@
           <button id="registerSubmit" class="primary-button">Register</button>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div id="commandPalette" class="command-palette hidden">
-    <div class="palette-card">
-      <input id="paletteInput" type="text" placeholder="Type a command..." />
-      <ul id="paletteList"></ul>
     </div>
   </div>
 
