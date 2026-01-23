@@ -1,0 +1,4 @@
+flask==3.0.3
+bcrypt==4.2.0
+requests==2.32.3
+pywebview==5.1
