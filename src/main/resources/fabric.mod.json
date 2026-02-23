@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "tiertaggerdb",
+  "version": "${version}",
+  "name": "Tier Tagger DB",
+  "description": "Tier/Verify Mod mit DB-Anbindung und /tier + /verify.",
+  "authors": ["Codex"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "de.mjadventure.tierlistmod.client.TierTaggerClientMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": ">=1.21.4 <=1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
