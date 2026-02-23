@@ -5,7 +5,6 @@ import de.mjadventure.tierlistmod.data.PlayerProfile;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ProfileCache {
@@ -13,6 +12,9 @@ public class ProfileCache {
     private final Map<String, Optional<PlayerProfile>> byName = new ConcurrentHashMap<>();
 
     public Optional<PlayerProfile> getOrLoad(String playerName) {
+        if (playerName == null || playerName.isBlank()) {
+            return Optional.empty();
+        }
         return byName.computeIfAbsent(playerName.toLowerCase(), k -> databaseService.loadProfileByName(playerName));
     }
 
@@ -21,6 +23,9 @@ public class ProfileCache {
     }
 
     public void invalidate(String name) {
+        if (name == null) {
+            return;
+        }
         byName.remove(name.toLowerCase());
     }
 

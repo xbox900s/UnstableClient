@@ -48,7 +48,18 @@ public class DatabaseService {
     }
 
     public VerifyResult verifyByCode(String code, String minecraftName, UUID uuid) {
-        String lookup = "SELECT discord_id, verify_code_created_at FROM TierModDB WHERE verify_code = ? LIMIT 1";
+        if (code == null || code.isBlank() || minecraftName == null || minecraftName.isBlank()) {
+            return VerifyResult.INVALID_INPUT;
+        }
+
+        String lookup = """
+                SELECT discord_id, verify_code_created_at
+                FROM TierModDB
+                WHERE verify_code = ?
+                  AND is_blacklisted = 0
+                LIMIT 1
+                """;
+
         String update = """
                 UPDATE TierModDB
                 SET minecraft_name = ?, minecraft_uuid = ?, linked_at = NOW(), link_source = 'verify',
@@ -59,7 +70,7 @@ public class DatabaseService {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             connection.setAutoCommit(false);
             try (PreparedStatement lookupStmt = connection.prepareStatement(lookup)) {
-                lookupStmt.setString(1, code);
+                lookupStmt.setString(1, code.trim());
                 try (ResultSet rs = lookupStmt.executeQuery()) {
                     if (!rs.next()) {
                         connection.rollback();
@@ -74,11 +85,12 @@ public class DatabaseService {
 
                     long discordId = rs.getLong("discord_id");
                     try (PreparedStatement updateStmt = connection.prepareStatement(update)) {
-                        updateStmt.setString(1, minecraftName);
+                        updateStmt.setString(1, minecraftName.trim());
                         updateStmt.setString(2, uuid == null ? null : uuid.toString());
                         updateStmt.setLong(3, discordId);
                         updateStmt.executeUpdate();
                     }
+
                     connection.commit();
                     return VerifyResult.OK;
                 }
@@ -96,9 +108,14 @@ public class DatabaseService {
         long discordId = rs.getLong("discord_id");
         String name = rs.getString("minecraft_name");
         String uuidText = rs.getString("minecraft_uuid");
+
         UUID uuid = null;
         if (uuidText != null && !uuidText.isBlank()) {
-            uuid = UUID.fromString(uuidText);
+            try {
+                uuid = UUID.fromString(uuidText);
+            } catch (IllegalArgumentException ignored) {
+                uuid = null;
+            }
         }
 
         List<TierEntry> tiers = new ArrayList<>();
@@ -134,6 +151,7 @@ public class DatabaseService {
         OK,
         CODE_NOT_FOUND,
         CODE_EXPIRED,
+        INVALID_INPUT,
         ERROR
     }
 }

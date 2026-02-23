@@ -63,6 +63,7 @@ public class TierTaggerClientMod implements ClientModInitializer {
             }
             case CODE_NOT_FOUND -> client.player.sendMessage(Text.literal("Code nicht gefunden.").formatted(Formatting.RED), false);
             case CODE_EXPIRED -> client.player.sendMessage(Text.literal("Code ist abgelaufen (15 Minuten).").formatted(Formatting.RED), false);
+            case INVALID_INPUT -> client.player.sendMessage(Text.literal("Ungültiger Code.").formatted(Formatting.RED), false);
             case ERROR -> client.player.sendMessage(Text.literal("Datenbankfehler bei der Verifizierung.").formatted(Formatting.DARK_RED), false);
         }
     }
@@ -73,7 +74,10 @@ public class TierTaggerClientMod implements ClientModInitializer {
         }
 
         for (AbstractClientPlayerEntity player : client.world.getPlayers()) {
-            CACHE.getOrLoad(player.getName().getString()).ifPresent(profile -> {
+            CACHE.getOrLoad(player.getGameProfile().getName()).ifPresent(profile -> {
+                if (profile.playerName() == null || profile.playerName().isBlank()) {
+                    return;
+                }
                 player.setCustomName(buildOverheadLabel(profile));
                 player.setCustomNameVisible(true);
             });
